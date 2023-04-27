@@ -1,0 +1,328 @@
+ public function getNewOrders()
+    {
+                set_time_limit(0);
+            $pagination = $this->GetOrders(1,"2021-04-12","2023-04-12");
+          
+            
+      
+            $data = $this->readJsonFile();
+            $order_id = "";
+            $OrderStatus = "";
+            $AdjustmentAmount = "";
+            $AmountPaid = "";
+            $AmountSaved = "";
+            $CreatedTime = "";
+            $Subtotal = "";
+            $Total = "";
+            $BuyerUserID = "";
+            $PaidTime = "";
+            $ShippedTime = "";
+            $ShippingService = "";
+            $ShippingServicePriority = "";
+            $ExpeditedService = "";
+            $SalesTaxPercent = "";
+            $Name = "";
+            $Street1 = "";
+            $Street2 = "";
+            $CityName = "";
+            $StateOrProvince = "";
+            $Country = "";
+            $CountryName = "";
+            $Phone = "";
+            $PostalCode = "";
+            $AddressID = "";
+            $AddressOwner = "";
+            for ($i=1; $i <= $pagination; $i++) { 
+                $data =  $this->GetOrders($i,"2020-01-01","2023-04-25");
+          
+            if(isset($data['OrderArray']['Order'])){
+                foreach ($data['OrderArray']['Order'] as $order) {
+
+                    $order_id = $order['OrderID'];
+                    $order = $this->GetOrderById($order_id);
+                    //General Definitions
+                    $CheckoutStatus = $order['CheckoutStatus'];
+                    $payment_status =  $CheckoutStatus['Status'];
+                    $payment_method =  $CheckoutStatus['PaymentMethod'];
+                    $ShippingDetails = $order['ShippingDetails'];
+                    $ShippingAddress = $order['ShippingAddress'];
+                    $TransactionArray = $order['TransactionArray']['Transaction'];
+                    //Order Definitions
+                    
+                    if (isset($order['OrderStatus']) && !is_array($order['OrderStatus'])) {
+                     $OrderStatus = $order['OrderStatus'];
+                   }
+                   
+                   if (isset($order['AdjustmentAmount']) && !is_array($order['AdjustmentAmount'])) {
+                     $AdjustmentAmount = $order['AdjustmentAmount'];
+                   }
+                   
+                   if (isset($order['AmountPaid']) && !is_array($order['AmountPaid'])) {
+                     $AmountPaid = $order['AmountPaid'];
+                   }
+                   
+                   if (isset($order['AmountSaved']) && !is_array($order['AmountSaved'])) {
+                     $AmountSaved = $order['AmountSaved'];
+                   }
+                   
+                   if (isset($order['CreatedTime']) && !is_array($order['CreatedTime'])) {
+     
+                     $CreatedTime =  date('Y-m-d H:i:s', strtotime($order['CreatedTime']));
+                   }
+                   
+                   if (isset($order['Subtotal']) && !is_array($order['Subtotal'])) {
+                     $Subtotal = $order['Subtotal'];
+                   }
+                   
+                   if (isset($order['Total']) && !is_array($order['Total'])) {
+                     $Total = $order['Total'];
+                   }
+                   
+                   if (isset($order['BuyerUserID']) && !is_array($order['BuyerUserID'])) {
+                     $BuyerUserID = $order['BuyerUserID'];
+                   }
+                   
+                   if (isset($order['PaidTime']) && !is_array($order['PaidTime'])) {
+                     $PaidTime =  date('Y-m-d H:i:s', strtotime($order['PaidTime']));
+                   }
+                   
+                   if (isset($order['ShippedTime']) && !is_array($order['ShippedTime'])) {
+                     $ShippedTime = date('Y-m-d H:i:s', strtotime($order['ShippedTime']));
+                   }
+                 if(isset( $ShippingDetails['ShippingServiceOptions'])){
+                         $ShippingService = $ShippingDetails['ShippingServiceOptions']['ShippingService'];
+                         $ShippingServicePriority = $ShippingDetails['ShippingServiceOptions']['ShippingServicePriority'];
+                        
+                    }
+                    if (isset($ShippingDetails['ShippingServiceOptions']['ExpeditedService'])){
+                     if($ShippingDetails['ShippingServiceOptions']['ExpeditedService']){
+     
+                         $ExpeditedService = 1;
+                     }
+                    }else{
+                     $ExpeditedService = 0;
+                    }
+                     if(isset($ShippingDetails['TaxJurisdiction'])){
+                         $SalesTaxPercent = $ShippingDetails['TaxJurisdiction']['SalesTaxPercent'];
+                     }else{
+                         $SalesTaxPercent =0;
+                     }
+                     if (isset($ShippingAddress['Name']) && !is_array($ShippingAddress['Name'])) {
+                         $Name = $ShippingAddress['Name'];
+                     }
+                       
+                     if (isset($ShippingAddress['Street1']) && !is_array($ShippingAddress['Street1'])) {
+                         $Street1 = $ShippingAddress['Street1'];
+                     }
+                       
+                     if (isset($ShippingAddress['Street2']) && !is_array($ShippingAddress['Street2'])) {
+                         $Street2 = $ShippingAddress['Street2'];
+                     }
+                       
+                     if (isset($ShippingAddress['CityName']) && !is_array($ShippingAddress['CityName'])) {
+                         $CityName = $ShippingAddress['CityName'];
+                     }
+                       
+                     if (isset($ShippingAddress['StateOrProvince']) && !is_array($ShippingAddress['StateOrProvince'])) {
+                         $StateOrProvince = $ShippingAddress['StateOrProvince'];
+                     }
+                       
+                     if (isset($ShippingAddress['Country']) && !is_array($ShippingAddress['Country'])) {
+                         $Country = $ShippingAddress['Country'];
+                     }
+                       
+                     if (isset($ShippingAddress['CountryName']) && !is_array($ShippingAddress['CountryName'])) {
+                         $CountryName = $ShippingAddress['CountryName'];
+                     }
+                       
+                     if (isset($ShippingAddress['Phone']) && !is_array($ShippingAddress['Phone'])) {
+                         $Phone = $ShippingAddress['Phone'];
+                     }
+                       
+                     if (isset($ShippingAddress['PostalCode']) && !is_array($ShippingAddress['PostalCode'])) {
+                         $PostalCode = $ShippingAddress['PostalCode'];
+                     }
+                       
+                     if (isset($ShippingAddress['AddressID']) && !is_array($ShippingAddress['AddressID'])) {
+                         $AddressID = $ShippingAddress['AddressID'];
+                     }
+                       
+                     if (isset($ShippingAddress['AddressOwner']) && !is_array($ShippingAddress['AddressOwner'])) {
+                         $AddressOwner = $ShippingAddress['AddressOwner'];
+                     }
+                     //Storing Order Data
+                     $NewOrder = new EbayOrder();
+                     $NewOrder->OrderId = $order_id ;
+                     $NewOrder->OrderStatus = $OrderStatus ;
+                     $NewOrder->AdjustmentAmount = $AdjustmentAmount ;
+                     $NewOrder->AmountPaid = $AmountPaid ;
+                     $NewOrder->AmountSaved = $AmountSaved ;
+                     $NewOrder->CreatedTime = $CreatedTime ;
+                     $NewOrder->Subtotal = $Subtotal ;
+                     $NewOrder->Total = $Total ;
+                     $NewOrder->BuyerUserID = $BuyerUserID ;
+                     $NewOrder->PaidTime = $PaidTime ;
+                     $NewOrder->ShippedTime = $ShippedTime ;
+                     $NewOrder->ShippingService = $ShippingService ;
+                     $NewOrder->ShippingServicePriority = $ShippingServicePriority ;
+                     $NewOrder->SalesTaxPercent = $SalesTaxPercent ;
+                     $NewOrder->ExpeditedService = $ExpeditedService ;
+                     $NewOrder->Name = $Name ;
+                     $NewOrder->Street1 = $Street1 ;
+                     if(!is_array($Street2)){
+                         $NewOrder->Street2 = $Street2 ;
+                     }
+                     $NewOrder->CityName = $CityName ;
+                     if(!is_array($StateOrProvince)){
+                         $NewOrder->StateOrProvince = $StateOrProvince ;
+                     }
+                     
+                     $NewOrder->Country = $Country ;
+                     $NewOrder->CountryName = $CountryName ;
+                     if(!is_array($Phone)){
+                         $NewOrder->Phone = $Phone ;
+                     }
+                     $NewOrder->PostalCode = $PostalCode ;
+                     $NewOrder->AddressID = $AddressID ;
+                     $NewOrder->AddressOwner = $AddressOwner ;
+                     if(EbayOrder::where('OrderID',$order_id)->first() == null){
+                         if($NewOrder->save()){
+                             $ShippingCarrierUsed = '';
+                             $ShipmentTrackingNumber = '';
+                             $CreatedDate = '';
+                             $ItemID = '';
+                             $Site = '';
+                             $Title = '';
+                             $SKU = '';
+                             $QuantityPurchased = '';
+                             $TransactionID = '';
+                             $TransactionPrice = '';
+                             $ActualDeliveryTime = '';
+                             $EstimatedDeliveryTimeMin = '';
+                             $EstimatedDeliveryTimeMax = '';
+                             $HandleByTime = '';
+                             $MinNativeEstimatedDeliveryTime = '';
+                             $MaxNativeEstimatedDeliveryTime = '';
+                             $ShippedTime = '';
+                             $TotalTaxAmount = '';
+                             $ebay_order_id = '';
+                             $items = array();
+                                if(!isset($TransactionArray['Item'])){
+                                 foreach ($TransactionArray as $TransactionArray) {
+                                     // Item Information's
+                                     $item_id = $TransactionArray['Item']['ItemID'];
+                                     $title = $TransactionArray['Item']['Title'];
+                                     $site = $TransactionArray['Item']['Site'];
+                                     if(isset($TransactionArray['Item']['SKU'])){
+                                         $sku = $TransactionArray['Item']['SKU'];
+                                     }else{
+                                         $sku = "";
+                                     }
+                                     $item = array(
+                                         'ItemID'=> $item_id,
+                                         'Site'=> $site,
+                                         'Title'=> $title,
+                                         'SKU'=> $sku,
+             
+                                     );
+                                     array_push($items, $item);
+                                    }
+                                }else{
+                                     $item_id = $TransactionArray['Item']['ItemID'];
+                                     $title = $TransactionArray['Item']['Title'];
+                                     $site = $TransactionArray['Item']['Site'];
+                                     if(isset($TransactionArray['Item']['SKU'])){
+                                         $sku = $TransactionArray['Item']['SKU'];
+                                     }else{
+                                         $sku = "";
+                                     }
+                                     $item = array(
+                                         'ItemID'=> $item_id,
+                                         'Site'=> $site,
+                                         'Title'=> $title,
+                                         'SKU'=> $sku,
+             
+                                     );
+                                     array_push($items, $item);
+                                }
+                                foreach ($items as $item ) {
+                                 // dd($TransactionArray);
+                                 if(isset($TransactionArray['ShippingDetails']['ShipmentTrackingDetails'])){
+                                     if(isset($TransactionArray['ShippingDetails']['ShipmentTrackingDetails']['ShippingCarrierUsed'])){
+                                         $ShippingCarrierUsed = $TransactionArray['ShippingDetails']['ShipmentTrackingDetails']['ShippingCarrierUsed'];
+                                     }
+                                     if(isset($TransactionArray['ShippingDetails']['ShipmentTrackingDetails']['ShipmentTrackingNumber'])){
+                                         $ShipmentTrackingNumber = $TransactionArray['ShippingDetails']['ShipmentTrackingDetails']['ShipmentTrackingNumber'];
+                                     }
+                                 
+                                 }
+                                 $CreatedDate = date('Y-m-d H:i:s', strtotime( $TransactionArray['CreatedDate']));
+                                 $ItemID = $item['ItemID'];
+                                 $Site = $item['Site'];
+                                 $Title = $item['Title'];
+                                 $SKU = $item['SKU'];
+                                 $QuantityPurchased =  $TransactionArray['QuantityPurchased'];
+                                 if(isset($TransactionArray['ShippingServiceSelected'])){
+                                     if(isset($TransactionArray['ShippingServiceSelected']['ShippingPackageInfo']['ActualDeliveryTime'])){
+                                         $ActualDeliveryTime =  $TransactionArray['ShippingServiceSelected']['ShippingPackageInfo']['ActualDeliveryTime'];
+                                     }
+                                     if(isset($TransactionArray['ShippingServiceSelected']['ShippingPackageInfo']['EstimatedDeliveryTimeMin'])){
+                                         $EstimatedDeliveryTimeMin =  $TransactionArray['ShippingServiceSelected']['ShippingPackageInfo']['EstimatedDeliveryTimeMin'];
+                                     }
+                                     if(isset($TransactionArray['ShippingServiceSelected']['ShippingPackageInfo']['EstimatedDeliveryTimeMax'])){
+                                         $EstimatedDeliveryTimeMax =  $TransactionArray['ShippingServiceSelected']['ShippingPackageInfo']['EstimatedDeliveryTimeMax'];
+                                     }
+                                     if(isset($TransactionArray['ShippingServiceSelected']['ShippingPackageInfo']['HandleByTime'])){
+                                         $HandleByTime =  $TransactionArray['ShippingServiceSelected']['ShippingPackageInfo']['HandleByTime'];
+                                     }
+                                     if(isset($TransactionArray['ShippingServiceSelected']['ShippingPackageInfo']['MinNativeEstimatedDeliveryTime'])){
+                                         $MinNativeEstimatedDeliveryTime =  $TransactionArray['ShippingServiceSelected']['ShippingPackageInfo']['MinNativeEstimatedDeliveryTime'];
+                                     }
+                                 }
+                                //  $ShippedTime =  $TransactionArray['ShippedTime'];
+                                 if(isset( $TransactionArray['eBayCollectAndRemitTaxes'])){
+                                     $TotalTaxAmount =  $TransactionArray['eBayCollectAndRemitTaxes']['TotalTaxAmount'];
+                                 }
+                                 $EBayOrderID =  $NewOrder->id;
+             
+             
+                                 //Store Item Information's Here
+                                 $orderItem = new EbayOrderItem;
+                                 $orderItem->ShippingCarrierUsed = $ShippingCarrierUsed ?? '';
+                                 $orderItem->ShipmentTrackingNumber = $ShipmentTrackingNumber ?? '';
+                                 $orderItem->CreatedDate = $CreatedDate ?? '';
+                                 $orderItem->ItemID = $ItemID ?? '';
+                                 $orderItem->Site = $Site ?? '';
+                                 $orderItem->Title = $Title ?? '';
+                                 $orderItem->SKU = $SKU ?? '';
+                                 $orderItem->QuantityPurchased = $QuantityPurchased ?? '';
+                                 $orderItem->TransactionID = $TransactionID ?? '';
+                                 $orderItem->TransactionPrice = $TransactionPrice ?? 0.0;
+                                 $orderItem->ActualDeliveryTime = $ActualDeliveryTime ?? '';
+                                 $orderItem->EstimatedDeliveryTimeMin = $EstimatedDeliveryTimeMin ?? '';
+                                 $orderItem->EstimatedDeliveryTimeMax = $EstimatedDeliveryTimeMax ?? '';
+                                 $orderItem->HandleByTime = $HandleByTime ?? '';
+                                 $orderItem->MinNativeEstimatedDeliveryTime = $MinNativeEstimatedDeliveryTime ?? '';
+                                 $orderItem->MaxNativeEstimatedDeliveryTime = $MaxNativeEstimatedDeliveryTime ?? '';
+                                 $orderItem->ShippedTime = $ShippedTime ?? '';
+                                 $orderItem->TotalTaxAmount = $TotalTaxAmount ?? '';
+                                 $orderItem->ebay_order_id = $EBayOrderID ?? '';
+                                 
+                                 $orderItem->save();
+                                }
+                         } 
+                     }
+                     
+         
+         
+         
+         
+                
+                 }
+            }
+            
+           
+            
+        }  
+    
+    }
